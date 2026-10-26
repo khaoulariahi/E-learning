@@ -23,6 +23,7 @@ All AI models are free endpoints from **NVIDIA Build** (`build.nvidia.com`).
 | Phase | State |
 |-------|-------|
 | 0 Foundations + runtime | ✅ Code done, 31 tests pass. ⏳ Live checks with a real API key still to run (see [phase 0 checklist](docs/phases/phase-0-foundations.md#phase-0-checklist)). |
+| Student interface | ✅ Clickable demo on a sample notebook (chat, résumé, podcast, quiz, flashcards, mind map, progress); features become real phase by phase |
 | 1–8 | Not started |
 
 ## Requirements
@@ -53,10 +54,13 @@ docker compose up -d                       # dashboard: http://localhost:6333/da
 pytest                                     # unit tests (no API calls)
 python -m assistant.scripts.smoke_test     # real calls to NVIDIA + Qdrant
 
-# 5. Run (two terminals)
+# 5. Run (separate terminals)
 python -m assistant.worker                 # background jobs
-streamlit run assistant\app\streamlit_app.py
+streamlit run assistant\app\streamlit_app.py                                           # developer UI  → http://localhost:8501
+streamlit run assistant\app\student_app.py --theme.base=dark --server.port=8502       # student interface → http://localhost:8502
 ```
+
+**Two interfaces.** The **developer UI** is for testing every stage (debug data, metrics, evaluation). The **student interface** is the NotebookLM-style product (Sources · Chat · Studio) used for demos and validation with the teacher. It currently runs on a sample notebook (`assistant/app/demo_data.py`); its chat uses the real model over those sample sources when an API key is set, otherwise prepared answers. Each phase replaces the sample data with the real pipeline through `assistant/app/student_backend.py`.
 
 **VS Code:** open the repo folder and install the **Python** extension (Microsoft). The repo's `.vscode/settings.json` points it at `.venv`, so every new terminal activates the venv automatically (you'll see `(.venv)` at the start of the prompt). If it doesn't, press `Ctrl+Shift+P` → "Python: Select Interpreter" → choose `.venv`, then open a new terminal.
 

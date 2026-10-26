@@ -212,7 +212,7 @@ Rules: Pydantic request/response models (reuse `core.models`), consistent error 
 
 ### P8-T16: Platform frontend integration
 
-Build the student-facing UI in the platform's frontend (the Streamlit app was for development only):
+Build the student-facing UI in the platform's frontend. The Streamlit **student interface** (`assistant/app/student_app.py`), validated with the teacher, is the reference for screens and behaviour, and `student_backend.py`'s functions map to the API endpoints of P8-T06:
 - **Notebook page**: sources panel (upload with per-file progress, statuses, warnings), chat (streaming, citations that open the source viewer at the page or audio time), and a studio panel (résumé, podcast, learn, mind map), similar to the NotebookLM layout.
 - **Source viewer**: page image with highlighted blocks (from `bbox`), and an audio player with transcript.
 - **Résumé viewer**: Markdown with KaTeX, ⚠️ items, the report (collapsed), downloads.

@@ -309,4 +309,5 @@ flowchart TD
 - [ ] P4-T10 job
 - [ ] P4-T11 UI
 - [ ] P4-T12 eval + tests
+- [ ] **P4-UI** Student interface: audio sources with progress; audio citations show the timestamp and play from that moment.
 - [ ] **Acceptance:** 1-hour lecture searchable in < ~10 min, timestamp citations play at the right moment, WER measured

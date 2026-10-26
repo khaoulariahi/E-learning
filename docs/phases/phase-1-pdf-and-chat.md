@@ -835,4 +835,5 @@ Tests:
 - [ ] P1-T24 Chat tab
 - [ ] P1-T25 Docling spike + decision record
 - [ ] P1-T26 fixtures + tests
+- [ ] **P1-UI** Student interface: in `assistant/app/student_backend.py`, replace `add_upload` and `answer` with the real upload/ingest job and the chat engine (per-file progress in the Sources panel; citations open the page).
 - [ ] **Acceptance:** question about text that exists only inside an image → correct answer, right page cited

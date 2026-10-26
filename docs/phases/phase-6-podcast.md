@@ -331,4 +331,5 @@ A second handler, `@handler("podcast_render")`, renders the audio of an existing
 - [ ] P6-T11 job
 - [ ] P6-T12 UI
 - [ ] P6-T13 eval + tests
+- [ ] **P6-UI** Student interface: `podcast_script` from the podcast job; a real MP3 player with chapters replaces the browser-voice preview.
 - [ ] **Acceptance:** natural 5-min FR podcast, no unsupported facts, single-line re-render works

@@ -556,4 +556,5 @@ Append the results to `assistant/eval/history.csv`.
 - [ ] P5-T17 export
 - [ ] P5-T18 UI + mind map
 - [ ] P5-T19 eval
+- [ ] **P5-UI** Student interface: `resume_steps`, `resume_markdown`, `resume_report` and `concept_graph` come from the résumé job and the concept graph; export buttons.
 - [ ] **Acceptance:** recall ≥ 95%, all formulas/definitions verified or flagged, 0 wrong in manual review

@@ -318,4 +318,5 @@ In the Chat tab, when a conversation is empty, show:
 - [ ] P2-T11 intents
 - [ ] P2-T12 notebook guide
 - [ ] P2-T13 Eval tab
+- [ ] **P2-UI** Student interface: overview and suggested questions from the notebook guide; the "not found" answer; answer-language setting wired to the engine.
 - [ ] **Acceptance:** hit@8 ≥ 90%, correctness ≥ 85%, refusal correctness ≥ 90%

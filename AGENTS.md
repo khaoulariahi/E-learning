@@ -12,7 +12,8 @@ These rules apply to every coding agent and every person working on the study as
 - Model IDs, thresholds and limits live in `assistant/config.yaml`, never in code.
 - Every API call goes through the **cache** (`cached_call`) and the **rate limiter** (`limiter.slot(role)`).
 - `pytest` passes. Tests that need the real NVIDIA API are marked `@pytest.mark.live` (skipped by default; run with `pytest -m live`).
-- The result is visible in the Streamlit app, at least in a debug expander.
+- The result is visible in the **developer UI** (`assistant/app/streamlit_app.py`), at least in a debug expander.
+- Student-facing features are also wired into the **student interface** (`assistant/app/student_app.py`) by replacing the matching function in `assistant/app/student_backend.py` with the real pipeline, keeping its signature. The student interface is shown to the teacher for validation, so it must always run: never leave it broken, and keep the demo content in `demo_data.py` until the real feature replaces it. Each phase file has a `P<n>-UI` checklist item for this.
 - Slow work (> ~1 s) runs as a background job with tasks (`JobContext.run_tasks`) so it shows progress and resumes after a crash.
 
 ## Conventions

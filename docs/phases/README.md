@@ -18,6 +18,27 @@ Phases 3 and 4 are independent of each other, so you can do them in either order
 
 ---
 
+## Two interfaces, both updated in every phase
+
+| Interface | File | Who it's for | Run |
+|-----------|------|--------------|-----|
+| **Developer UI** | `assistant/app/streamlit_app.py` | The developer: test every stage, see debug data (IR viewer, retrieval scores, prompts, metrics, eval) | `streamlit run assistant/app/streamlit_app.py` (port 8501) |
+| **Student interface** | `assistant/app/student_app.py` | Students and the teacher: the NotebookLM-style product (Sources · Chat · Studio), used for validation demos | `streamlit run assistant/app/student_app.py --theme.base=dark --server.port=8502` |
+
+The student interface reads **everything** through `assistant/app/student_backend.py`. Today that module serves a sample notebook (`demo_data.py`); chat already uses the real LLM over the sample sources when an API key is set. Each phase **replaces the matching backend functions with the real pipeline, keeping their signatures**, so `student_app.py` only changes when a new screen is needed:
+
+| Phase | Backend functions to make real |
+|-------|-------------------------------|
+| 1 | `add_upload` (ingest job, progress), `answer` (retrieval + chat engine, real citations) |
+| 2 | overview + suggested questions (notebook guide), "not found" answers, answer language |
+| 3 | `add_upload` for images, DOCX, PPTX, multi-photo lessons |
+| 4 | `add_upload` for audio, timestamp citations |
+| 5 | `resume_steps`, `resume_markdown`, `resume_report`, `concept_graph` |
+| 6 | `podcast_script` + a real MP3 player instead of the browser voice |
+| 7 | `quiz`, `flashcards`, `record_answer`, mastery, study plan, tutor mode |
+
+Each phase file has a `P<n>-UI` checklist item for this. A feature isn't done until it works in **both** interfaces: debug details in the developer UI, the clean student-facing version in the student interface. Keep the demo content in `demo_data.py` until the real feature replaces it, so the student interface always stays demo-ready for the teacher.
+
 ## How each task is written
 
 ```
@@ -38,7 +59,7 @@ Task IDs (`P<phase>-T<nn>`) are stable, so use them in commit messages: `P1-T06:
 - [ ] Every new model ID, threshold or limit lives in `config.yaml`, not in code.
 - [ ] Every API call goes through the **cache** and the **rate limiter**.
 - [ ] `pytest` passes. Tests that need the NVIDIA API are marked `@pytest.mark.live` and skipped by default.
-- [ ] The result is **visible in Streamlit**, at least in a debug expander.
+- [ ] The result is **visible in the developer UI**, at least in a debug expander, and student-facing features are wired into the **student interface** through `student_backend.py` (see "Two interfaces" above).
 - [ ] Timings are recorded with `metrics.record(...)` for anything slower than ~100 ms.
 
 ## Conventions used in all phases

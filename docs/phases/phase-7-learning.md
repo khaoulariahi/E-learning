@@ -514,4 +514,5 @@ Sub-sections:
 - [ ] P7-T18 contests
 - [ ] P7-T19 Learn tab
 - [ ] P7-T20 eval
+- [ ] **P7-UI** Student interface: `quiz`, `flashcards`, `record_answer` and the mastery data come from the learning engine; add the study plan and tutor mode.
 - [ ] **Acceptance:** the 3 deliberately failed concepts show as weak and drive the next session; > 90% of reviewed questions are correct and useful

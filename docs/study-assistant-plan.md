@@ -810,6 +810,8 @@ Per `(student, concept)`:
 
 ## 11. Streamlit dev UI
 
+> There are **two** Streamlit apps. This section describes the **developer UI** (`assistant/app/streamlit_app.py`). The **student interface** (`assistant/app/student_app.py`) is the NotebookLM-style product screen (Sources · Chat · Studio) used for validation with the teacher. It reads everything through `assistant/app/student_backend.py`, which serves sample data until each phase makes the matching function real (see "Two interfaces" in `docs/phases/README.md`).
+
 Sidebar: pick or create a **notebook**, choose the test **student profile**, and see background job status.
 
 | Tab | Contents |

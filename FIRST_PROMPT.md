@@ -15,6 +15,7 @@ A **NotebookLM-style study assistant** for an E-learning platform. Students uplo
 - **Exam-night summary ("résumé"):** complete and verified. Definitions and formulas are quoted verbatim, checked by code and by a second model, and inserted by code, never retyped by an LLM.
 - **Podcast:** two hosts, built only from verified content.
 - **Learning intelligence:** quizzes, flashcards (FSRS), a mastery score per concept, a tutor mode, and a study plan.
+- **Two interfaces:** a **developer UI** (`assistant/app/streamlit_app.py`) for me to test every stage with debug details, and a **student interface** (`assistant/app/student_app.py`, NotebookLM-style: Sources · Chat · Studio) that I show to my teacher for validation. Every feature must work in both. The student interface gets its data only from `assistant/app/student_backend.py`, which currently serves sample data; each phase replaces those functions with the real pipeline (see "Two interfaces" in `docs/phases/README.md`). Never leave the student interface broken.
 - **Constraints:** all AI models are **free NVIDIA Build endpoints** (`build.nvidia.com`); Python 3.13 with a venv; a Streamlit app is the developer's test UI; Qdrant (in Docker) is the vector database; SQLite holds metadata, jobs and the cache for now. Performance (parallelism under rate limits, caching, progress, resume after crashes) is built in from the start.
 
 ## Read these first, in this order
@@ -31,6 +32,7 @@ Then look at the existing code in `assistant/`, especially `core/runtime/` (cach
 
 - **Phase 0 (foundations) is implemented**, and its 31 unit tests pass (`pytest`). It was checked without an API key, including a real crash-and-resume test of the worker.
 - **Not yet done in Phase 0:** the live checks with a real NVIDIA key: `python -m assistant.scripts.smoke_test`, then the 100-task demo job with real calls from the Streamlit Performance tab (it should stay within rate limits, and a second run should come fully from the cache). The model IDs and the reranker endpoint have **never been tested against the real API**, so expect to fix some of them.
+- **Student interface:** a clickable demo on a sample biology notebook. Chat uses the real model over the sample sources when a key is set; résumé, podcast (browser voice), quiz, flashcards, mind map and progress use sample data.
 - Phases 1–8 haven't started.
 
 ## How I want you to work

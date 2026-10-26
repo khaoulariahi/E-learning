@@ -271,4 +271,5 @@ Using `python-pptx`:
 - [ ] P3-T10 job integration
 - [ ] P3-T11 UI
 - [ ] P3-T12 eval + tests
+- [ ] **P3-UI** Student interface: `add_upload` handles images, DOCX and PPTX; multi-photo "lesson" grouping in the Sources panel; uncertain formulas shown with ⚠️.
 - [ ] **Acceptance:** readable handwritten notes IR, measured CER, formula disagreements flagged, PPTX notes searchable
