@@ -58,6 +58,8 @@ python -m assistant.worker                 # background jobs
 streamlit run assistant\app\streamlit_app.py
 ```
 
+**VS Code:** open the repo folder and install the **Python** extension (Microsoft). The repo's `.vscode/settings.json` points it at `.venv`, so every new terminal activates the venv automatically (you'll see `(.venv)` at the start of the prompt). If it doesn't, press `Ctrl+Shift+P` → "Python: Select Interpreter" → choose `.venv`, then open a new terminal.
+
 ## Setup (everything in Docker)
 
 ```powershell
