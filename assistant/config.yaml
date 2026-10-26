@@ -1,0 +1,60 @@
+# Study assistant configuration.
+# Model IDs, limits and thresholds live here, never in code.
+# Before changing a model ID, check it on build.nvidia.com and note its real rate limit.
+
+paths:
+  data_dir: data            # relative to the repo root; override with ASSISTANT_DATA_DIR
+
+nvidia:
+  base_url: https://integrate.api.nvidia.com/v1     # OpenAI-compatible (chat, embeddings)
+  ai_base_url: https://ai.api.nvidia.com/v1         # NIM-specific endpoints (rerank, OCR, ...)
+  grpc_server: grpc.nvcf.nvidia.com:443             # Riva speech (phases 4, 6)
+  timeout_s: 120
+
+limits:
+  background_share: 0.8      # share of each model's rpm the worker may use; the UI gets the rest
+
+models:
+  chat:
+    id: nvidia/llama-3.3-nemotron-super-49b-v1.5
+    fallbacks: [meta/llama-3.3-70b-instruct]
+    rpm: 35
+    max_in_flight: 6
+    max_tokens: 4096
+    temperature: 0.2
+    # Nemotron Super v1.5 reasons by default; "/no_think" in the system prompt turns it off.
+    # Check the model card if you change the model.
+    system_prefix: "/no_think"
+  fast:
+    id: meta/llama-3.1-8b-instruct
+    fallbacks: []
+    rpm: 35
+    max_in_flight: 8
+    max_tokens: 2048
+    temperature: 0.1
+  embed:
+    id: nvidia/llama-3.2-nv-embedqa-1b-v2
+    # No fallbacks: vectors from different embedding models can't share one collection.
+    rpm: 35
+    max_in_flight: 4
+    batch_size: 32
+    extra:
+      input_type: true       # NVIDIA retrieval embedders need input_type=passage|query
+  rerank:
+    id: nvidia/llama-3.2-nv-rerankqa-1b-v2
+    endpoint: retrieval/nvidia/llama-3_2-nv-rerankqa-1b-v2/reranking
+    rpm: 35
+    max_in_flight: 4
+
+qdrant:
+  url: http://localhost:6333   # override with QDRANT_URL (docker compose sets http://qdrant:6333)
+  collection: chunks
+
+cache:
+  enabled: true
+
+worker:
+  concurrency: 2             # jobs running at the same time
+  poll_s: 1.0
+  heartbeat_s: 15
+  stale_after_s: 120

@@ -1,0 +1,16 @@
+# Phase 0. Later phases add their own packages here.
+streamlit>=1.37
+openai>=1.40
+pydantic>=2.7
+pydantic-settings>=2.3
+python-dotenv
+pyyaml
+tenacity
+aiolimiter
+httpx
+qdrant-client>=1.12
+pandas
+
+# dev
+pytest
+pytest-asyncio

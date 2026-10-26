@@ -1,0 +1,58 @@
+# Local services for the study assistant.
+#
+#   docker compose up -d                  Qdrant only (use with the venv workflow)
+#   docker compose --profile app up -d    Qdrant + worker + Streamlit UI in containers (http://localhost:8501)
+#
+# Data lives in named volumes, not Windows folders: bind-mounting Windows folders can corrupt Qdrant's
+# storage and SQLite's WAL files. The venv workflow keeps its own SQLite database in ./data/.
+
+name: elearning
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.15.5
+    container_name: elearning-qdrant
+    ports:
+      - "6333:6333"   # REST + dashboard: http://localhost:6333/dashboard
+      - "6334:6334"   # gRPC
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+
+  worker:
+    profiles: ["app"]
+    build: .
+    image: elearning-assistant:dev
+    command: ["python", "-m", "assistant.worker"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      QDRANT_URL: http://qdrant:6333
+    volumes:
+      - app_data:/app/data
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+
+  ui:
+    profiles: ["app"]
+    image: elearning-assistant:dev
+    command: ["streamlit", "run", "assistant/app/streamlit_app.py",
+              "--server.address=0.0.0.0", "--server.port=8501", "--server.headless=true"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      QDRANT_URL: http://qdrant:6333
+    ports:
+      - "8501:8501"
+    volumes:
+      - app_data:/app/data
+    depends_on:
+      - qdrant
+      - worker
+
+volumes:
+  qdrant_storage:
+  app_data:
