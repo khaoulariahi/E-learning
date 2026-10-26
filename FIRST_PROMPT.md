@@ -26,6 +26,10 @@ A **NotebookLM-style study assistant** for an E-learning platform. Students uplo
 4. `docs/phases/README.md`: how the implementation guide is organized, shared conventions, and the database migration numbering.
 5. The phase file we're working on (start with `docs/phases/phase-0-foundations.md`, then `phase-1-pdf-and-chat.md`).
 
+To open the interfaces (from the repo root, venv active, Qdrant running with `docker compose up -d`):
+- Student interface: `streamlit run assistant/app/student_app.py --theme.base=dark --server.port=8502` → http://localhost:8502
+- Developer UI: `streamlit run assistant/app/streamlit_app.py` → http://localhost:8501, with `python -m assistant.worker` in another terminal for background jobs
+
 Then look at the existing code in `assistant/`, especially `core/runtime/` (cache, limiter, queue, jobs, progress, metrics), `core/providers/` (LLM, embeddings, rerank) and `worker.py`. Every new feature must use these instead of creating its own.
 
 ## Current state

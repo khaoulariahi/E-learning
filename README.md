@@ -9,6 +9,18 @@ A NotebookLM-style study assistant for the E-learning platform. Students upload 
 
 All AI models are free endpoints from **NVIDIA Build** (`build.nvidia.com`).
 
+## Open the interfaces
+
+Run from the repo root with the venv active, after `docker compose up -d` (Qdrant).
+
+| Interface | For | Command | Address |
+|-----------|-----|---------|---------|
+| **Student interface** (Sources · Chat · Studio) | Demos and validation with the teacher | `streamlit run assistant\app\student_app.py --theme.base=dark --server.port=8502` | http://localhost:8502 |
+| **Developer UI** | Testing every stage, debug data, metrics | `streamlit run assistant\app\streamlit_app.py` | http://localhost:8501 |
+| Background worker | Needed by the developer UI to run jobs | `python -m assistant.worker` | none |
+
+Everything in Docker instead: `docker compose --profile app up -d --build` starts both interfaces at the same addresses, plus the worker.
+
 ## Documentation
 
 | Read | What it is |
@@ -68,7 +80,7 @@ streamlit run assistant\app\student_app.py --theme.base=dark --server.port=8502 
 
 ```powershell
 copy assistant\.env.example .env           # put your key in NVIDIA_API_KEY
-docker compose --profile app up -d --build # Qdrant + worker + UI at http://localhost:8501
+docker compose --profile app up -d --build # Qdrant + worker + dev UI (http://localhost:8501) + student interface (http://localhost:8502)
 docker compose --profile app logs -f worker
 docker compose --profile app down          # stop (data is kept in Docker volumes)
 ```
