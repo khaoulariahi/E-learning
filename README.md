@@ -29,6 +29,7 @@ Everything in Docker instead: `docker compose --profile app up -d --build` start
 | [docs/phases/README.md](docs/phases/README.md) | Implementation guide, phase by phase and task by task, with conventions |
 | [AGENTS.md](AGENTS.md) | Rules for coding agents (and humans) working in this repo |
 | [FIRST_PROMPT.md](FIRST_PROMPT.md) | The first message to give a coding agent that starts on this project |
+| [docs/guide-du-projet.html](docs/guide-du-projet.html) | Guide in French: architecture diagrams, every folder and file explained, glossary of the tools, likely questions (open it in a browser) |
 
 ## Status
 

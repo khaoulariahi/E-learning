@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide du projet</title>
+<style>
+:root{
+  --bg:#f7f7f5; --panel:#ffffff; --panel2:#f0f1f4; --ink:#1d2024; --muted:#5b616b; --line:#d9dce1;
+  --accent:#3451b2; --accent-soft:#e6ebfa; --teal:#0f766e; --teal-soft:#dff3f0; --amber:#9a5b00; --amber-soft:#fdf0d8;
+  --red:#b42318; --red-soft:#fde4e1; --green:#1e7a34; --green-soft:#e1f3e5; --code:#eef0f4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121417; --panel:#1b1e23; --panel2:#23272e; --ink:#e7e9ec; --muted:#a3a9b3; --line:#343a43;
+    --accent:#8fa8ff; --accent-soft:#232c48; --teal:#5fd3c4; --teal-soft:#14332f; --amber:#f2b85b; --amber-soft:#3a2c14;
+    --red:#ff8a80; --red-soft:#3d1c1a; --green:#7fd18f; --green-soft:#183020; --code:#262a31;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121417; --panel:#1b1e23; --panel2:#23272e; --ink:#e7e9ec; --muted:#a3a9b3; --line:#343a43;
+  --accent:#8fa8ff; --accent-soft:#232c48; --teal:#5fd3c4; --teal-soft:#14332f; --amber:#f2b85b; --amber-soft:#3a2c14;
+  --red:#ff8a80; --red-soft:#3d1c1a; --green:#7fd18f; --green-soft:#183020; --code:#262a31;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)} a:hover{text-decoration:none}
+code,.mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace;font-size:.88em}
+code{background:var(--code);padding:1px 6px;border-radius:5px}
+pre{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:.85rem;line-height:1.5}
+pre code{background:none;padding:0}
+.layout{display:flex;flex-wrap:wrap;gap:28px;max-width:1320px;margin:0 auto;padding:24px 16px 80px}
+nav.toc{flex:1 1 230px;max-width:280px}
+nav.toc .box{position:sticky;top:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+nav.toc a{display:block;padding:5px 8px;border-radius:8px;text-decoration:none;color:var(--ink);font-size:.93rem}
+nav.toc a:hover{background:var(--panel2)}
+main{flex:999 1 640px;min-width:0}
+@media (max-width:900px){nav.toc{max-width:none} nav.toc .box{position:static}}
+header.hero{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px 28px 22px;margin-bottom:28px}
+h1{font-size:2rem;line-height:1.2;margin:0 0 8px}
+h2{font-size:1.5rem;margin:48px 0 14px;padding-top:8px;display:flex;align-items:center;gap:10px}
+h3{font-size:1.15rem;margin:28px 0 10px;display:flex;align-items:center;gap:8px}
+h4{margin:0 0 6px;font-size:1rem}
+p{margin:0 0 12px}
+.lead{color:var(--muted);font-size:1.05rem}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:.82rem;font-weight:600;background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
+.badge.ok{background:var(--green-soft);color:var(--green);border-color:transparent}
+.badge.wait{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.badge.info{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.grid.two{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.callout{border-radius:12px;padding:14px 16px;margin:14px 0;border:1px solid transparent}
+.callout.info{background:var(--accent-soft)} .callout.warn{background:var(--amber-soft)} .callout.ok{background:var(--green-soft)} .callout.tip{background:var(--teal-soft)}
+.callout b:first-child{display:block;margin-bottom:4px}
+svg.ico{width:20px;height:20px;flex:none;vertical-align:-4px}
+h2 svg.ico{width:26px;height:26px;color:var(--accent)}
+.diagram{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;margin:12px 0 6px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:720px;height:auto}
+.caption{color:var(--muted);font-size:.88rem;margin:6px 4px 16px}
+.steps{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:12px 0}
+.step{flex:1 1 150px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;position:relative}
+.step .n{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--panel);align-items:center;justify-content:center;font-weight:700;font-size:.85rem;margin-bottom:6px}
+.step small{color:var(--muted);display:block;font-size:.82rem;margin-top:4px}
+.timeline{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.phase{border-radius:12px;padding:12px 14px;border:1px solid var(--line);background:var(--panel)}
+.phase.done{border-color:var(--green);box-shadow:inset 4px 0 0 var(--green)}
+.phase.partial{border-color:var(--amber);box-shadow:inset 4px 0 0 var(--amber)}
+.phase .t{font-weight:700} .phase small{color:var(--muted)}
+.tree{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-family:ui-monospace,Consolas,monospace;font-size:.86rem;line-height:1.75;overflow-x:auto;white-space:nowrap}
+.tree .c{color:var(--muted);font-family:system-ui,sans-serif;font-size:.85rem}
+.tree .d{color:var(--accent);font-weight:700}
+.tree .x{color:var(--muted);font-style:italic}
+details.folder{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}
+details.folder>summary{cursor:pointer;padding:14px 18px;font-weight:700;display:flex;align-items:center;gap:10px;list-style:none}
+details.folder>summary::-webkit-details-marker{display:none}
+details.folder>summary .sub{font-weight:400;color:var(--muted);font-size:.9rem}
+details.folder>summary::after{content:"+";margin-left:auto;font-size:1.3rem;color:var(--muted)}
+details.folder[open]>summary::after{content:"–"}
+details.folder .files{padding:0 14px 14px;display:grid;gap:10px}
+.file{background:var(--panel2);border-radius:10px;padding:12px 14px}
+.file .name{font-family:ui-monospace,Consolas,monospace;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.file .name .tag{font-family:system-ui,sans-serif;font-weight:600;font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+.file p{margin:6px 0 0;font-size:.94rem}
+.file ul{margin:6px 0 0;padding-left:20px;font-size:.92rem}
+.file .why{margin-top:8px;font-size:.88rem;color:var(--muted)}
+.file .why b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--panel2);font-weight:700}
+.table-wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.glossary{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.term{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.term h4{display:flex;align-items:center;gap:8px}
+.term .ex{color:var(--muted);font-size:.88rem;margin-top:6px}
+.qa details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0;padding:0}
+.qa summary{cursor:pointer;padding:12px 16px;font-weight:600}
+.qa details>div{padding:0 16px 14px}
+.theme-btn{float:right;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;font:inherit;font-size:.85rem}
+footer{color:var(--muted);font-size:.85rem;margin-top:48px;text-align:center}
+/* diagram colours */
+.dg-box{fill:var(--panel2);stroke:var(--line);stroke-width:1.5}
+.dg-ui{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.dg-core{fill:var(--teal-soft);stroke:var(--teal);stroke-width:1.5}
+.dg-store{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.5}
+.dg-cloud{fill:var(--green-soft);stroke:var(--green);stroke-width:1.5}
+.dg-frame{fill:none;stroke:var(--line);stroke-width:1.5;stroke-dasharray:6 5}
+.dg-t{fill:var(--ink);font:600 14px system-ui,sans-serif}
+.dg-s{fill:var(--muted);font:12.5px system-ui,sans-serif}
+.dg-m{fill:var(--ink);font:12.5px ui-monospace,Consolas,monospace}
+.dg-l{fill:var(--muted);font:italic 12px system-ui,sans-serif}
+.dg-a{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arrow)}
+.dg-a2{stroke:var(--accent);stroke-width:1.8;fill:none;marker-end:url(#arrowB)}
+</style>
+</head>
+<body>
+
+<!-- Icônes (réutilisées partout) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4l2 2h9A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M6 3h8l4 4v14H6z M14 3v4h4"/></symbol>
+    <symbol id="i-py" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M6 3h8l4 4v14H6z M14 3v4h4"/><path fill="none" stroke="currentColor" stroke-width="1.6" d="M9 13l-1.5 1.5L9 16m4-3 1.5 1.5L13 16"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M6 3h8l4 4v14H6z M14 3v4h4"/><path stroke="currentColor" stroke-width="1.6" d="M9 12h6M9 15h6M9 18h4"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 3 20 7.5v9L12 21 4 16.5v-9z M4 7.5 12 12l8-4.5M12 12v9"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"/></symbol>
+    <symbol id="i-screen" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-test" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M9 3h6M10 3v6L5 19a1.5 1.5 0 0 0 1.3 2h11.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path stroke="currentColor" stroke-width="1.6" d="M7.5 15h9"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.6" d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5"/></symbol>
+    <symbol id="i-q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><circle cx="12" cy="17" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M7 4v16l13-8z"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6.5 10v4a3 3 0 0 0 3 3H14"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="14" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M11 11l9-9M17 5l3 3M15 7l2 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  </defs>
+</svg>
+
+<div class="layout">
+<nav class="toc" aria-label="Sommaire">
+  <div class="box">
+    <strong>Sommaire</strong>
+    <a href="#projet">1. Le projet en bref</a>
+    <a href="#etat">2. Où en est-on ?</a>
+    <a href="#architecture">3. Architecture générale</a>
+    <a href="#flux">4. Comment ça circule</a>
+    <a href="#arbo">5. Arborescence du dépôt</a>
+    <a href="#fichiers">6. Fichier par fichier</a>
+    <a href="#concepts">7. Concepts clés du code</a>
+    <a href="#outils">8. Lexique des outils</a>
+    <a href="#lancer">9. Lancer le projet</a>
+    <a href="#questions">10. Questions probables du prof</a>
+    <a href="#suite">11. La suite</a>
+  </div>
+</nav>
+
+<main>
+<header class="hero">
+  <button class="theme-btn" type="button" onclick="toggleTheme()">Clair / sombre</button>
+  <h1>Guide du projet : assistant d'étude</h1>
+  <p class="lead">Ce document explique le dépôt <code>E-learning</code> : ce qu'on construit, comment c'est organisé, à quoi sert chaque dossier et chaque fichier, et les outils utilisés. Les noms de fichiers, de fonctions et de commandes sont écrits exactement comme dans le dépôt.</p>
+  <div class="badges">
+    <span class="badge ok"><svg class="ico"><use href="#i-check"/></svg>Phase 0 : code terminé, 31 tests OK</span>
+    <span class="badge wait">Phase 0 : 2 vérifications avec la vraie clé API à faire</span>
+    <span class="badge ok"><svg class="ico"><use href="#i-check"/></svg>Interface étudiante : démo cliquable</span>
+    <span class="badge info">Phases 1 à 8 : à faire</span>
+  </div>
+</header>
+
+<!-- 1 -->
+<section id="projet">
+<h2><svg class="ico"><use href="#i-book"/></svg>1. Le projet en bref</h2>
+<p>On construit un <strong>assistant d'étude</strong> du style NotebookLM pour la plateforme E-learning. L'étudiant dépose ses documents de cours et l'assistant l'aide à réviser.</p>
+<div class="grid">
+  <div class="card"><h4>Ce qu'on dépose</h4><p>PDF (numériques, scannés, ou avec du texte dans des images), photos (tableau, notes manuscrites), TXT, Markdown, DOCX, PPTX, enregistrements audio du prof. En <strong>français ou en anglais</strong>.</p></div>
+  <div class="card"><h4>Chat avec citations</h4><p>Des réponses tirées <strong>uniquement</strong> des documents, avec la source (fichier, page ou minute de l'audio). Si l'info n'y est pas, l'assistant le dit.</p></div>
+  <div class="card"><h4>Résumé d'examen vérifié</h4><p>Définitions et formules citées mot pour mot, vérifiées par du code et par un second modèle, puis insérées par le code (jamais recopiées par l'IA).</p></div>
+  <div class="card"><h4>Podcast</h4><p>Deux voix (un élève, un tuteur) qui résument le cours, à partir du contenu vérifié uniquement.</p></div>
+  <div class="card"><h4>Apprentissage</h4><p>Quiz, flashcards, niveau de maîtrise par notion, mode tuteur, plan de révision jusqu'à la date de l'examen.</p></div>
+  <div class="card"><h4>Contraintes</h4><p>Modèles d'IA <strong>gratuits</strong> de NVIDIA Build ; Python 3.13 ; tout doit rester rapide malgré les limites de requêtes (parallélisme, cache, reprise après crash).</p></div>
+</div>
+
+<h3><svg class="ico"><use href="#i-screen"/></svg>Deux interfaces</h3>
+<div class="grid two">
+  <div class="card"><h4>Interface développeur : <code>assistant/app/streamlit_app.py</code></h4><p>Pour tester chaque étape : données de débogage, métriques, file des tâches de fond. Adresse : <code>http://localhost:8501</code>.</p></div>
+  <div class="card"><h4>Interface étudiante : <code>assistant/app/student_app.py</code></h4><p>Le produit tel que l'étudiant le verra (Sources · Discussion · Studio), montré au professeur pour validation. Adresse : <code>http://localhost:8502</code>.</p></div>
+</div>
+<div class="callout info"><b>Règle du projet</b>Chaque fonctionnalité doit marcher dans les <strong>deux</strong> interfaces. L'interface étudiante lit toutes ses données via <code>assistant/app/student_backend.py</code> : aujourd'hui ce sont des données d'exemple ; chaque phase remplace une fonction par le vrai traitement, sans changer l'écran.</div>
+</section>
+
+<!-- 2 -->
+<section id="etat">
+<h2><svg class="ico"><use href="#i-map"/></svg>2. Où en est-on ?</h2>
+<p>Le travail est découpé en 9 phases (détail dans <code>docs/phases/</code>). Chaque phase se termine par un test d'acceptation concret.</p>
+<div class="timeline">
+  <div class="phase partial"><div class="t">Phase 0 · Fondations</div><small>Config, base de données, cache, limiteur de requêtes, file de tâches, worker, appels aux modèles, interface développeur.</small><p style="margin:6px 0 0"><span class="badge wait">Code fait · test avec clé API à faire</span></p></div>
+  <div class="phase"><div class="t">Phase 1 · PDF + chat</div><small>TXT/MD, tous les types de PDF, découpage, index Qdrant, chat avec citations.</small></div>
+  <div class="phase"><div class="t">Phase 2 · Précision</div><small>Jeux de questions de test, mesures, réécriture des questions, seuil « pas trouvé », résumés.</small></div>
+  <div class="phase"><div class="t">Phase 3 · Images + Office</div><small>Photos, écriture manuscrite, DOCX/PPTX, double lecture des formules.</small></div>
+  <div class="phase"><div class="t">Phase 4 · Audio</div><small>Transcription, nettoyage, thèmes, détection de « ça va tomber à l'examen ».</small></div>
+  <div class="phase"><div class="t">Phase 5 · Résumé vérifié</div><small>Inventaire, extraction avec citations, vérifications, graphe de notions.</small></div>
+  <div class="phase"><div class="t">Phase 6 · Podcast</div><small>Script à deux voix, vérification des faits, synthèse vocale.</small></div>
+  <div class="phase"><div class="t">Phase 7 · Apprentissage</div><small>Questions générées et contrôlées, correction, maîtrise, répétition espacée.</small></div>
+  <div class="phase"><div class="t">Phase 8 · Intégration</div><small>API, comptes, Postgres/Redis, sécurité, RGPD, mise en production.</small></div>
+</div>
+<div class="callout ok" style="margin-top:16px"><b>Déjà disponible</b>L'<strong>interface étudiante</strong> fonctionne en démo sur un cahier d'exemple (biologie : la photosynthèse) : chat (réponses réelles du modèle si la clé API est configurée, sinon réponses préparées), résumé, podcast (voix du navigateur), quiz, flashcards, carte mentale, progression.</div>
+</section>
+
+<!-- 3 -->
+<section id="architecture">
+<h2><svg class="ico"><use href="#i-flow"/></svg>3. Architecture générale</h2>
+<p>Le code est organisé en <strong>couches</strong>. Les interfaces ne parlent jamais directement aux modèles : elles passent par <code>assistant/core</code>, qui gère le cache, les limites de requêtes et la base de données.</p>
+
+<div class="diagram" role="img" aria-label="Schéma d'architecture : interfaces, worker, core, stockage, API NVIDIA">
+<svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--muted)"/></marker>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker>
+  </defs>
+  <!-- Interfaces -->
+  <text class="dg-l" x="20" y="24">Ce que l'on voit (navigateur)</text>
+  <rect class="dg-ui" x="20" y="34" width="300" height="80" rx="12"/>
+  <text class="dg-t" x="36" y="60">Interface étudiante  :8502</text>
+  <text class="dg-m" x="36" y="82">app/student_app.py</text>
+  <text class="dg-s" x="36" y="102">Sources · Discussion · Studio</text>
+  <rect class="dg-ui" x="350" y="34" width="300" height="80" rx="12"/>
+  <text class="dg-t" x="366" y="60">Interface développeur  :8501</text>
+  <text class="dg-m" x="366" y="82">app/streamlit_app.py</text>
+  <text class="dg-s" x="366" y="102">tests, file des tâches, métriques</text>
+  <!-- student backend -->
+  <rect class="dg-ui" x="20" y="146" width="300" height="62" rx="12"/>
+  <text class="dg-t" x="36" y="172">Couche de données de l'interface</text>
+  <text class="dg-m" x="36" y="194">app/student_backend.py (+ demo_data.py)</text>
+  <!-- worker -->
+  <rect class="dg-core" x="690" y="34" width="290" height="80" rx="12"/>
+  <text class="dg-t" x="706" y="60">Worker (processus séparé)</text>
+  <text class="dg-m" x="706" y="82">worker.py · core/handlers/</text>
+  <text class="dg-s" x="706" y="102">exécute les tâches longues</text>
+  <!-- core -->
+  <rect class="dg-frame" x="20" y="236" width="960" height="150" rx="14"/>
+  <text class="dg-l" x="34" y="256">assistant/core : le cœur, partagé par tout le monde</text>
+  <rect class="dg-core" x="40" y="268" width="290" height="100" rx="12"/>
+  <text class="dg-t" x="56" y="294">providers/</text>
+  <text class="dg-s" x="56" y="316">tous les appels aux modèles :</text>
+  <text class="dg-m" x="56" y="338">llm.py · embeddings.py</text>
+  <text class="dg-m" x="56" y="358">rerank.py · base.py</text>
+  <rect class="dg-core" x="355" y="268" width="290" height="100" rx="12"/>
+  <text class="dg-t" x="371" y="294">runtime/</text>
+  <text class="dg-s" x="371" y="316">cache · limiteur · file de tâches</text>
+  <text class="dg-m" x="371" y="338">cache.py limiter.py queue.py</text>
+  <text class="dg-m" x="371" y="358">jobs.py progress.py metrics.py</text>
+  <rect class="dg-core" x="670" y="268" width="290" height="100" rx="12"/>
+  <text class="dg-t" x="686" y="294">Base commune</text>
+  <text class="dg-s" x="686" y="316">configuration, BD, types</text>
+  <text class="dg-m" x="686" y="338">config.py db.py models.py</text>
+  <text class="dg-m" x="686" y="358">notebooks.py migrations/</text>
+  <!-- storage -->
+  <text class="dg-l" x="20" y="418">Stockage (sur la machine)</text>
+  <rect class="dg-store" x="20" y="428" width="300" height="90" rx="12"/>
+  <text class="dg-t" x="36" y="454">SQLite</text>
+  <text class="dg-m" x="36" y="476">data/app.db</text>
+  <text class="dg-s" x="36" y="498">cahiers, tâches, cache, métriques</text>
+  <rect class="dg-store" x="350" y="428" width="300" height="90" rx="12"/>
+  <text class="dg-t" x="366" y="454">Qdrant (dans Docker)</text>
+  <text class="dg-m" x="366" y="476">localhost:6333</text>
+  <text class="dg-s" x="366" y="498">vecteurs des documents (phase 1)</text>
+  <!-- cloud -->
+  <rect class="dg-cloud" x="690" y="428" width="290" height="90" rx="12"/>
+  <text class="dg-t" x="706" y="454">NVIDIA Build (Internet)</text>
+  <text class="dg-s" x="706" y="476">LLM, embeddings, reranker,</text>
+  <text class="dg-s" x="706" y="498">OCR, voix (clé API dans .env)</text>
+  <!-- arrows -->
+  <path class="dg-a" d="M170 114 V146"/>
+  <path class="dg-a" d="M170 208 V268"/>
+  <path class="dg-a" d="M500 114 V268"/>
+  <path class="dg-a" d="M835 114 V236"/>
+  <path class="dg-a2" d="M650 74 H690"/>
+  <text class="dg-l" x="652" y="66">tâches</text>
+  <path class="dg-a" d="M500 368 V428"/>
+  <path class="dg-a" d="M815 368 V428"/>
+  <path class="dg-a" d="M185 368 L170 428"/>
+  <path class="dg-a" d="M330 340 C 520 400, 640 420, 700 440"/>
+</svg>
+</div>
+<p class="caption">Les flèches montrent qui appelle qui. L'interface développeur dépose des tâches dans SQLite ; le worker les prend et les exécute ; tous les appels aux modèles passent par <code>providers/</code>, qui utilise le cache et le limiteur de <code>runtime/</code>.</p>
+
+<h3><svg class="ico"><use href="#i-gear"/></svg>Les grands principes</h3>
+<div class="grid">
+  <div class="card"><h4>Un seul chemin vers les modèles</h4><p>Tout appel à NVIDIA passe par <code>core/providers/</code>. Changer de modèle = changer <code>config.yaml</code>, pas le code.</p></div>
+  <div class="card"><h4>Ne jamais payer deux fois</h4><p>Chaque réponse de modèle est gardée en cache dans SQLite. Refaire le même appel est instantané et gratuit.</p></div>
+  <div class="card"><h4>Respecter les limites</h4><p>Le service gratuit accepte environ 35 à 40 requêtes par minute et par modèle. Le limiteur répartit les appels pour ne pas les dépasser.</p></div>
+  <div class="card"><h4>Le travail long en arrière-plan</h4><p>Le worker exécute les tâches longues. L'interface reste fluide et affiche la progression.</p></div>
+  <div class="card"><h4>Reprise après crash</h4><p>Chaque petite tâche enregistre son résultat dès qu'elle finit. Après un arrêt, seules les tâches inachevées sont refaites.</p></div>
+  <div class="card"><h4>Vérifier, pas faire confiance</h4><p>Ce que l'étudiant apprend (définitions, formules, réponses de quiz) est vérifié par du code puis par un second modèle.</p></div>
+</div>
+</section>
+
+<!-- 4 -->
+<section id="flux">
+<h2><svg class="ico"><use href="#i-play"/></svg>4. Comment ça circule</h2>
+
+<h3>Une tâche de fond (exemple : le « demo job » de la phase 0)</h3>
+<div class="steps">
+  <div class="step"><span class="n">1</span><br><strong>Clic dans l'interface</strong><small>onglet Performance → <code>get_queue().enqueue("demo", …)</code> ajoute une ligne dans la table <code>jobs</code></small></div>
+  <div class="step"><span class="n">2</span><br><strong>Le worker la prend</strong><small><code>claim()</code> : une seule requête SQL atomique, deux workers ne prennent jamais la même</small></div>
+  <div class="step"><span class="n">3</span><br><strong>Découpage en tâches</strong><small><code>JobContext.run_tasks()</code> crée une ligne par tâche dans <code>tasks</code></small></div>
+  <div class="step"><span class="n">4</span><br><strong>Appels en parallèle</strong><small>chaque tâche attend une place via <code>limiter.slot(role)</code>, puis appelle le modèle (cache d'abord)</small></div>
+  <div class="step"><span class="n">5</span><br><strong>Résultat enregistré</strong><small><code>task_done()</code> sauve le résultat ; en cas d'erreur <code>task_failed()</code>, les autres continuent</small></div>
+  <div class="step"><span class="n">6</span><br><strong>Progression affichée</strong><small><code>job_progress()</code> calcule fait/total et le temps restant ; l'interface se rafraîchit toutes les 2 s</small></div>
+</div>
+
+<h3>Une question dans le chat (aujourd'hui, interface étudiante)</h3>
+<div class="steps">
+  <div class="step"><span class="n">1</span><br><strong>Question</strong><small><code>student_app.py</code> appelle <code>backend.answer(...)</code></small></div>
+  <div class="step"><span class="n">2</span><br><strong>Sources numérotées</strong><small>les sources cochées sont mises dans le message, numérotées [1], [2]…</small></div>
+  <div class="step"><span class="n">3</span><br><strong>Modèle (si clé API)</strong><small><code>llm.stream()</code> envoie au modèle « chat » avec la consigne : répondre seulement avec les sources et citer [n]</small></div>
+  <div class="step"><span class="n">4</span><br><strong>Affichage progressif</strong><small>les mots apparaissent au fur et à mesure ; sans clé API : réponse préparée</small></div>
+  <div class="step"><span class="n">5</span><br><strong>Citations</strong><small>le texte est relu pour trouver les [n] ; chaque citation devient un bouton qui montre la source</small></div>
+</div>
+<div class="callout tip"><b>À partir de la phase 1</b>Au lieu de mettre toutes les sources dans le message, on cherchera les <strong>passages pertinents</strong> dans Qdrant (recherche par le sens + par les mots), on les reclassera avec le <em>reranker</em>, puis on enverra seulement les meilleurs au modèle. C'est le principe du <strong>RAG</strong> (voir le lexique).</div>
+</section>
+
+<!-- 5 -->
+<section id="arbo">
+<h2><svg class="ico"><use href="#i-folder"/></svg>5. Arborescence du dépôt</h2>
+<p>Les éléments en <span style="font-style:italic;color:var(--muted)">italique gris</span> ne sont <strong>pas</strong> dans Git : ils sont créés sur chaque machine.</p>
+<div class="tree">
+<span class="d">E-learning/</span><br>
+├── <span class="d">.vscode/</span> <span class="c">réglages de VS Code (active le venv automatiquement)</span><br>
+├── <span class="d">assistant/</span> <span class="c">tout le code Python de l'application</span><br>
+│&nbsp;&nbsp;&nbsp;├── <span class="d">app/</span> <span class="c">les deux interfaces Streamlit</span><br>
+│&nbsp;&nbsp;&nbsp;├── <span class="d">core/</span> <span class="c">le cœur : configuration, base de données, modèles, exécution</span><br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="d">handlers/</span> <span class="c">les types de tâches de fond</span><br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="d">migrations/</span> <span class="c">création des tables SQLite</span><br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="d">providers/</span> <span class="c">appels aux modèles NVIDIA</span><br>
+│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="d">runtime/</span> <span class="c">cache, limiteur, file de tâches, progression, métriques</span><br>
+│&nbsp;&nbsp;&nbsp;├── <span class="d">scripts/</span> <span class="c">outils en ligne de commande (smoke_test)</span><br>
+│&nbsp;&nbsp;&nbsp;├── <span class="d">tests/</span> <span class="c">tests automatiques (pytest)</span><br>
+│&nbsp;&nbsp;&nbsp;├── config.yaml · requirements.txt · requirements.lock.txt · worker.py · .env.example<br>
+├── <span class="d">docs/</span> <span class="c">le plan et ce guide</span><br>
+│&nbsp;&nbsp;&nbsp;└── <span class="d">phases/</span> <span class="c">le guide d'implémentation, phase par phase</span><br>
+├── .dockerignore · .gitignore · AGENTS.md · Dockerfile · docker-compose.yml<br>
+├── FIRST_PROMPT.md · README.md · pytest.ini<br>
+├── <span class="x">.venv/</span> <span class="c">environnement Python local (créé par python -m venv)</span><br>
+├── <span class="x">.env</span> <span class="c">la clé API NVIDIA (secrète)</span><br>
+└── <span class="x">data/</span> <span class="c">données générées : data/app.db (SQLite)</span>
+</div>
+</section>
+
+<!-- 6 -->
+<section id="fichiers">
+<h2><svg class="ico"><use href="#i-file"/></svg>6. Fichier par fichier</h2>
+<p>Cliquez sur un dossier pour l'ouvrir. Pour chaque fichier : son rôle, ce qu'il contient d'important, et une phrase pour l'expliquer à l'oral.</p>
+
+<details class="folder" open>
+<summary><svg class="ico"><use href="#i-folder"/></svg>Racine du dépôt <span class="sub">fichiers de configuration du projet</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>README.md <span class="tag">documentation</span></div><p>La page d'accueil du projet : présentation, état d'avancement, installation, comment ouvrir les deux interfaces, organisation des dossiers.</p><div class="why"><b>À l'oral :</b> « C'est le point d'entrée pour toute personne qui découvre le projet. »</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>AGENTS.md <span class="tag">règles</span></div><p>Les règles de travail pour les agents de code (et les humains) : définition de « terminé », conventions, pièges connus, règle des deux interfaces.</p><div class="why"><b>À l'oral :</b> « Il garantit que tout le code suit les mêmes règles : modèles dans la config, cache et limiteur obligatoires, tests. »</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>FIRST_PROMPT.md <span class="tag">documentation</span></div><p>Le premier message à donner à un agent de code qui reprend le projet : ce qu'on construit, quoi lire, l'état actuel, comment travailler.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-box"/></svg>Dockerfile <span class="tag">Docker</span></div><p>La « recette » de l'image Docker de l'application : part de <code>python:3.13-slim</code>, installe les paquets de <code>requirements.lock.txt</code>, copie le dossier <code>assistant</code>. Par défaut, lance le worker.</p><div class="why"><b>À l'oral :</b> « Il permet de lancer l'application à l'identique sur n'importe quel ordinateur, sans installer Python. »</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-box"/></svg>docker-compose.yml <span class="tag">Docker Compose</span></div><p>Décrit les services à lancer ensemble :</p><ul><li><code>qdrant</code> : la base vectorielle (toujours lancée), ports 6333/6334 ;</li><li><code>worker</code>, <code>ui</code> (8501), <code>student</code> (8502) : l'application, seulement avec <code>--profile app</code> ;</li><li>volumes <code>qdrant_storage</code> et <code>app_data</code> : les données persistantes.</li></ul><div class="why"><b>Pourquoi des volumes nommés ?</b> Monter un dossier Windows dans un conteneur peut corrompre les fichiers de Qdrant et de SQLite.</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-gear"/></svg>.dockerignore <span class="tag">Docker</span></div><p>Liste ce que Docker ne copie pas dans l'image : <code>.venv/</code>, <code>.env</code> (la clé ne doit jamais entrer dans l'image), <code>.git/</code>, <code>data/</code>, <code>docs/</code>, caches.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-gear"/></svg>.gitignore <span class="tag">Git</span></div><p>Liste ce que Git ne versionne pas : <code>.venv/</code>, <code>.env</code> (secret), <code>data/</code> (données locales), <code>__pycache__/</code>, <code>.pytest_cache/</code>.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-test"/></svg>pytest.ini <span class="tag">tests</span></div><p>Configuration de pytest : les tests sont dans <code>assistant/tests</code>, le mode asynchrone est automatique, et les tests marqués <code>live</code> (qui appellent la vraie API) sont exclus par défaut.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-gear"/></svg>.vscode/settings.json <span class="tag">éditeur</span></div><p>Dit à VS Code d'utiliser l'interpréteur <code>.venv</code> et de l'activer dans chaque nouveau terminal ; active pytest dans l'onglet Tests.</p></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>docs/ <span class="sub">le plan et les guides</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>docs/study-assistant-plan.md</div><p>Le plan complet (en anglais) : objectifs, architecture, choix techniques et leurs raisons, pipeline de chaque type de fichier, chat, résumé, podcast, apprentissage, phases, risques.</p><div class="why"><b>À l'oral :</b> « C'est le document de conception : il justifie chaque décision. »</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>docs/guide-du-projet.html</div><p>Ce guide, en français.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>docs/phases/README.md</div><p>L'index des phases : ordre et dépendances, format des tâches, définition de « terminé », conventions, numérotation des migrations SQL, règle des deux interfaces, fichiers de test à préparer.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>docs/phases/phase-0-foundations.md … phase-8-integration.md</div><p>Un fichier par phase, découpé en tâches numérotées (<code>P1-T06</code>…). Chaque tâche : objectif, fichiers, étapes, ébauche de code, critère « terminé », tests. À la fin : une checklist et le test d'acceptation de la phase.</p><ul><li><code>phase-0-foundations.md</code> : fondations (faite)</li><li><code>phase-1-pdf-and-chat.md</code> : PDF + chat</li><li><code>phase-2-accuracy-eval.md</code> : précision et évaluation</li><li><code>phase-3-images-office.md</code> : images, DOCX, PPTX</li><li><code>phase-4-audio.md</code> : enregistrements audio</li><li><code>phase-5-verified-resume.md</code> : résumé vérifié + notions</li><li><code>phase-6-podcast.md</code> : podcast</li><li><code>phase-7-learning.md</code> : quiz, maîtrise, plan</li><li><code>phase-8-integration.md</code> : mise en production</li></ul></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>assistant/ <span class="sub">racine du code Python</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>assistant/__init__.py <span class="tag">vide</span></div><p>Fichier vide qui fait de <code>assistant</code> un <strong>paquet</strong> Python, pour pouvoir écrire <code>from assistant.core import …</code>. Tous les <code>__init__.py</code> vides du projet ont ce même rôle.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-gear"/></svg>assistant/config.yaml <span class="tag">configuration</span></div><p>Tous les réglages, jamais écrits dans le code :</p><ul><li><code>models</code> : un <strong>rôle</strong> par usage (<code>chat</code>, <code>fast</code>, <code>embed</code>, <code>rerank</code>) avec l'identifiant du modèle NVIDIA, les modèles de secours, la limite de requêtes par minute (<code>rpm</code>) et le nombre d'appels simultanés (<code>max_in_flight</code>) ;</li><li><code>limits.background_share</code> : 80 % du débit pour le worker, 20 % pour l'interface ;</li><li><code>nvidia</code> (adresses de l'API), <code>qdrant</code>, <code>cache</code>, <code>worker</code>, <code>paths</code>.</li></ul><div class="why"><b>Pourquoi des rôles ?</b> Le code demande « le modèle chat », pas un nom précis : on change de modèle dans ce fichier seulement.</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-key"/></svg>assistant/.env.example <span class="tag">modèle</span></div><p>Modèle du fichier secret. On le copie en <code>.env</code> à la racine et on y met sa clé <code>NVIDIA_API_KEY</code>. Le vrai <code>.env</code> n'est jamais dans Git.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>assistant/requirements.txt <span class="tag">dépendances</span></div><p>La liste des bibliothèques nécessaires, avec des versions minimales (<code>streamlit</code>, <code>openai</code>, <code>pydantic</code>, <code>qdrant-client</code>, <code>tenacity</code>, <code>aiolimiter</code>, <code>pytest</code>…).</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-doc"/></svg>assistant/requirements.lock.txt <span class="tag">dépendances</span></div><p>Les versions <strong>exactes</strong> installées (produit par <code>pip freeze</code>). On installe à partir de ce fichier pour que tout le monde ait exactement les mêmes versions.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-cpu"/></svg>assistant/worker.py <span class="tag">processus</span></div><p>Le <strong>worker</strong> : un programme qui tourne en continu (<code>python -m assistant.worker</code>) et exécute les tâches de fond.</p><ul><li><code>main()</code> : au démarrage, initialise la base, remet en file les tâches abandonnées (<code>requeue_stale</code>), puis boucle : prend une tâche (<code>claim</code>), la lance, recommence ;</li><li><code>run_job()</code> : trouve le bon <em>handler</em>, l'exécute, marque la tâche terminée ou en échec ;</li><li><code>_heartbeats()</code> : signale toutes les 15 s que le worker est vivant ;</li><li>à l'arrêt (Ctrl+C) : remet ses tâches en cours dans la file (<code>requeue_worker</code>).</li></ul></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>assistant/core/ <span class="sub">base commune</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>core/config.py</div><p>Lit <code>config.yaml</code> et le fichier <code>.env</code>. <code>get_settings()</code> renvoie un objet <code>Settings</code> (mis en cache) avec :</p><ul><li><code>model(role)</code> : la config d'un rôle de modèle (<code>ModelCfg</code>) ;</li><li><code>api_key</code> : la clé, avec un message d'erreur clair si elle manque ;</li><li><code>data_dir</code> et <code>qdrant_url</code> : modifiables par les variables d'environnement <code>ASSISTANT_DATA_DIR</code> et <code>QDRANT_URL</code> (utilisées par les tests et par Docker).</li></ul></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-db"/></svg>core/db.py</div><p>Accès à SQLite (<code>data/app.db</code>) :</p><ul><li><code>connect()</code> : une connexion par fil d'exécution, en mode <strong>WAL</strong> (le worker écrit pendant que l'interface lit) ;</li><li><code>init_db()</code> : applique dans l'ordre les fichiers de <code>migrations/</code> pas encore appliqués ;</li><li><code>now()</code> : l'heure actuelle au format ISO.</li></ul></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-db"/></svg>core/migrations/001_runtime.sql</div><p>Crée les tables de la phase 0 :</p><ul><li><code>notebooks</code> : les cahiers (un par matière) ;</li><li><code>jobs</code> : les tâches de fond (type, paramètres, statut, worker, heartbeat) ;</li><li><code>tasks</code> : les sous-tâches d'un job, avec leur résultat (permet la reprise) ;</li><li><code>call_cache</code> : le cache des appels aux modèles ;</li><li><code>metrics</code> : les mesures de temps et de consommation.</li></ul><div class="why"><b>Règle :</b> on n'édite jamais une migration déjà appliquée ; on en ajoute une nouvelle (<code>002_…</code>).</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>core/models.py</div><p>Les <strong>types de données partagés</strong> (classes Pydantic), définis dès maintenant pour que toutes les phases s'accordent : <code>Block</code> (un morceau de document : titre, paragraphe, tableau, formule…), <code>PageReport</code>, <code>DocumentIR</code> (le document extrait, même format pour PDF, image, audio…), <code>Chunk</code> (un passage indexé), <code>Citation</code>.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>core/notebooks.py</div><p>Créer, lister et retrouver un cahier : <code>create_notebook()</code>, <code>list_notebooks()</code>, <code>get_notebook()</code>.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>core/handlers/__init__.py</div><p>Importe tous les handlers pour qu'ils s'enregistrent. Chaque phase ajoutera ici son module (par exemple l'ingestion de fichiers en phase 1).</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>core/handlers/demo.py</div><p>La tâche de démonstration <code>demo</code> : lance N petites tâches, soit de vrais appels au modèle <code>fast</code>, soit des tâches factices (<code>fake</code>) qui attendent un peu. Sert à vérifier le parallélisme, les limites, la progression, la reprise et le cache.</p></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>assistant/core/providers/ <span class="sub">les appels aux modèles</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>providers/base.py</div><p>La plomberie commune :</p><ul><li><code>openai_client()</code>, <code>http_client()</code> : un client par boucle d'exécution ;</li><li><code>with_retries()</code> : réessaie avec une attente croissante si l'API répond 429 (trop de requêtes), 5xx, délai dépassé ou coupure ; pas sur une erreur 400 (notre faute) ;</li><li><code>with_fallbacks()</code> : si le modèle principal est indisponible, essaie les modèles de secours de la config.</li></ul></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>providers/llm.py</div><p>Les modèles de langage :</p><ul><li><code>chat()</code> : une réponse texte (avec cache) ;</li><li><code>chat_json()</code> : une réponse JSON vérifiée par un schéma Pydantic, avec une tentative de réparation si le JSON est invalide ;</li><li><code>stream()</code> : la réponse mot par mot (pour le chat), sans cache ;</li><li><code>strip_think()</code> : enlève le « raisonnement » <code>&lt;think&gt;…&lt;/think&gt;</code> que certains modèles écrivent ;</li><li><code>system_prefix</code> : ajoute <code>/no_think</code> au modèle Nemotron pour couper ce raisonnement.</li></ul></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>providers/embeddings.py</div><p>Transforme des textes en vecteurs : <code>embed_passages()</code> (documents, par lots de 32), <code>embed_query()</code> (une question), <code>embedding_dim()</code>. Chaque texte est mis en cache séparément : seuls les nouveaux textes sont envoyés.</p><div class="why"><b>Pourquoi pas de modèle de secours ici ?</b> Des vecteurs de deux modèles différents ne sont pas comparables : on ne peut pas les mélanger.</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>providers/rerank.py</div><p><code>rerank(question, passages)</code> : demande au reranker de NVIDIA de reclasser des passages du plus pertinent au moins pertinent. Renvoie des <code>RerankHit</code> (position + score).</p></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>assistant/core/runtime/ <span class="sub">l'exécution : cache, limites, tâches</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/cache.py</div><p>Le cache des appels : <code>make_key()</code> calcule une empreinte SHA-256 de (type, modèle, version, entrée) ; <code>cached_call()</code> renvoie le résultat déjà connu ou exécute l'appel puis le stocke dans <code>call_cache</code>. <code>cache_stats()</code> pour l'affichage.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/limiter.py</div><p>Le limiteur de requêtes : <code>slot(role)</code> attend une place libre (limite par minute + nombre d'appels simultanés). <code>configure("worker" | "ui")</code> donne 80 % du débit au worker et 20 % à l'interface, pour que le chat reste rapide pendant un traitement long.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/queue.py</div><p>La file des tâches dans SQLite :</p><ul><li><code>SqliteJobQueue</code> : <code>enqueue</code>, <code>claim</code> (prise atomique), <code>heartbeat</code>, <code>complete</code>, <code>fail</code>, <code>cancel</code>, <code>retry</code>, <code>requeue_stale</code> (tâches d'un worker mort), <code>requeue_worker</code>, <code>get</code>, <code>list</code> ;</li><li>fonctions des sous-tâches : <code>ensure_tasks</code>, <code>pending_tasks</code>, <code>task_started</code>, <code>task_done</code>, <code>task_failed</code>, <code>task_results</code>.</li></ul></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/jobs.py</div><p>Le registre des handlers (<code>@handler("nom")</code>) et <code>JobContext.run_tasks()</code> : enregistre les sous-tâches, exécute en parallèle celles qui ne sont pas finies, enregistre chaque résultat, et s'arrête si le job est annulé (<code>JobCancelled</code>).</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/progress.py</div><p><code>job_progress()</code> renvoie un <code>JobProgress</code> (total, fait, échoué, en cours, étape, temps restant estimé). Le temps restant est calculé à partir du débit de la dernière minute.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/metrics.py</div><p>Mesures : <code>record()</code> (gardées en mémoire puis écrites par lots), <code>timer</code> (chronomètre), <code>summary()</code> (nombre d'appels, temps médian p50 et p95, taux de cache, erreurs, 429 par étape et par modèle).</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>runtime/aio.py</div><p>Le pont entre Streamlit (synchrone) et les appels asynchrones : une boucle d'exécution tourne en permanence dans un fil séparé ; <code>run_sync()</code> attend un résultat, <code>iter_sync()</code> transforme un flux asynchrone en flux normal (pour afficher le chat mot par mot).</p></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>assistant/app/ <span class="sub">les deux interfaces</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-screen"/></svg>app/streamlit_app.py <span class="tag">interface développeur</span></div><p>Point d'entrée de l'interface développeur : barre latérale (cahiers, tâches en cours) et 8 onglets. Performance et Settings fonctionnent ; les autres onglets seront remplis par les phases suivantes.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>app/common.py</div><p>Morceaux partagés de l'interface développeur : initialisation unique, barre latérale des cahiers, liste des tâches actives rafraîchie toutes les 3 s, panneau d'une tâche (barre de progression, Annuler, Réessayer, erreur).</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>app/tab_performance.py</div><p>L'onglet Performance : formulaire du « demo job », suivi en direct des tâches, tableau des métriques, statistiques du cache.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>app/tab_settings.py</div><p>L'onglet Settings : clé API chargée ou non, tableau des modèles et de leurs limites, contenu de <code>config.yaml</code>.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-screen"/></svg>app/student_app.py <span class="tag">interface étudiante</span></div><p>L'interface du style NotebookLM en trois colonnes :</p><ul><li><strong>Sources</strong> : liste à cocher, ajout de fichiers ;</li><li><strong>Discussion</strong> : aperçu du cahier, questions suggérées, réponses en direct avec citations cliquables ;</li><li><strong>Studio</strong> : Résumé d'examen, Podcast (lecture avec la voix du navigateur), Quiz, Flashcards, Carte mentale, Ma progression.</li></ul><div class="why"><b>Important :</b> ce fichier ne contient que l'affichage. Toutes les données viennent de <code>student_backend.py</code>.</div></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>app/student_backend.py <span class="tag">données de l'interface</span></div><p>La seule source de données de l'interface étudiante. Chaque fonction indique la phase qui la remplacera par le vrai traitement :</p><ul><li><code>add_upload</code> (phases 1, 3, 4), <code>answer</code> (phases 1, 2) ;</li><li><code>resume_steps</code>, <code>resume_markdown</code>, <code>resume_report</code>, <code>concept_graph</code> (phase 5) ;</li><li><code>podcast_script</code> (phase 6) ;</li><li><code>quiz</code>, <code>flashcards</code>, <code>record_answer</code> (phase 7).</li></ul><p><code>answer</code> utilise déjà le vrai modèle si la clé API existe ; sinon il donne des réponses préparées. <code>NotebookState</code> garde l'état de la session (sources, maîtrise, résultats générés).</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-py"/></svg>app/demo_data.py <span class="tag">données d'exemple</span></div><p>Le cahier d'exemple : 5 sources sur la photosynthèse (cours PDF, TD scanné, photo du tableau, enregistrement audio, résumé en anglais), réponses préparées, résumé, script du podcast, quiz, flashcards, notions et niveaux de maîtrise de départ. Il sera remplacé petit à petit par les vraies données.</p></div>
+</div>
+</details>
+
+<details class="folder">
+<summary><svg class="ico"><use href="#i-folder"/></svg>assistant/scripts/ et assistant/tests/ <span class="sub">vérifications</span></summary>
+<div class="files">
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-play"/></svg>scripts/smoke_test.py</div><p>Vérification complète avec la vraie API (<code>python -m assistant.scripts.smoke_test</code>) : clé, base de données, modèle <code>chat</code>, modèle <code>fast</code>, JSON, embeddings, reranker, Qdrant, cache. Affiche OK / FAIL pour chaque point.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-test"/></svg>tests/conftest.py</div><p>Préparation commune des tests : chaque test a son propre dossier de données temporaire et sa propre base, une fausse clé API, des limiteurs neufs, et des réessais sans attente.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-test"/></svg>tests/test_config_db.py</div><p>Config valide, dossier de données modifiable, message clair si la clé manque, migrations appliquées une seule fois, création de cahiers.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-test"/></svg>tests/test_cache_limiter.py</div><p>Le cache stocke et relit (avec du texte français), un appel en cache n'est exécuté qu'une fois, le limiteur respecte le nombre d'appels simultanés et la limite par minute, le partage 80/20.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-test"/></svg>tests/test_queue_jobs.py</div><p>Deux workers ne prennent jamais la même tâche, priorité respectée, reprise : seules les sous-tâches ratées sont refaites, tâche annulée qui s'arrête, type de tâche inconnu.</p></div>
+  <div class="file"><div class="name"><svg class="ico"><use href="#i-test"/></svg>tests/test_providers.py</div><p>Avec un <strong>faux client</strong> (sans Internet) : réessai après 429, passage au modèle de secours, pas de réessai sur 400, réparation du JSON, suppression du <code>&lt;think&gt;</code> en flux, embeddings par lots et cache par texte.</p></div>
+</div>
+</details>
+</section>
+
+<!-- 7 -->
+<section id="concepts">
+<h2><svg class="ico"><use href="#i-gear"/></svg>7. Concepts clés du code</h2>
+<div class="glossary">
+  <div class="term"><h4>Job et tâches</h4><p>Un <strong>job</strong> = un travail demandé (« analyser ce PDF »). Il est découpé en <strong>tâches</strong> (« page 12 »). Chaque tâche enregistre son résultat dès qu'elle finit.</p></div>
+  <div class="term"><h4>Handler</h4><p>La fonction qui sait exécuter un type de job. On l'enregistre avec <code>@handler("demo")</code> ; le worker la retrouve par son nom.</p></div>
+  <div class="term"><h4>Heartbeat</h4><p>Le « battement de cœur » : le worker met à jour <code>heartbeat_at</code> toutes les 15 s. Sans battement depuis 2 min, on considère le worker mort et on remet ses jobs en file.</p></div>
+  <div class="term"><h4>Rôle de modèle</h4><p><code>chat</code> (qualité), <code>fast</code> (rapide, gros volumes), <code>embed</code> (vecteurs), <code>rerank</code> (reclassement). Le code demande un rôle, la config dit quel modèle l'occupe.</p></div>
+  <div class="term"><h4>Modèle de secours (fallback)</h4><p>Si le modèle principal ne répond plus après plusieurs essais, on passe au suivant de la liste <code>fallbacks</code>.</p></div>
+  <div class="term"><h4>Réessai avec attente croissante</h4><p>Après une erreur temporaire, on attend un peu, puis plus longtemps, jusqu'à 5 essais (bibliothèque <code>tenacity</code>).</p></div>
+  <div class="term"><h4>Migration</h4><p>Un fichier SQL numéroté qui fait évoluer la base. <code>init_db()</code> applique ceux qui manquent, dans l'ordre.</p></div>
+  <div class="term"><h4>Mode démo</h4><p>Sans clé API, l'interface étudiante utilise des réponses préparées pour rester présentable.</p></div>
+</div>
+</section>
+
+<!-- 8 -->
+<section id="outils">
+<h2><svg class="ico"><use href="#i-box"/></svg>8. Lexique des outils</h2>
+
+<h3>Environnement et code</h3>
+<div class="glossary">
+  <div class="term"><h4>Python 3.13</h4><p>Le langage du projet. Version 3.13 car c'est celle installée, et la 3.10 arrive en fin de support en octobre 2026.</p></div>
+  <div class="term"><h4>venv (<code>.venv</code>)</h4><p>Un environnement Python <strong>isolé</strong> propre au projet : les bibliothèques sont installées dedans et ne touchent pas le reste de l'ordinateur.</p><p class="ex">Activation : <code>.\.venv\Scripts\Activate.ps1</code> → le terminal affiche <code>(.venv)</code>.</p></div>
+  <div class="term"><h4>pip</h4><p>L'installateur de bibliothèques Python. <code>pip install -r …</code> installe toute une liste ; <code>pip freeze</code> écrit les versions exactes.</p></div>
+  <div class="term"><h4>Git / GitHub</h4><p>Git garde l'historique des modifications (commits). GitHub héberge le dépôt en ligne pour travailler à plusieurs.</p></div>
+  <div class="term"><h4>VS Code</h4><p>L'éditeur de code. Avec l'extension Python, il active le venv automatiquement grâce à <code>.vscode/settings.json</code>.</p></div>
+  <div class="term"><h4>YAML (<code>.yaml</code>)</h4><p>Un format de fichier de réglages lisible par un humain (indentation, <code>clé: valeur</code>). Utilisé pour <code>config.yaml</code> et <code>docker-compose.yml</code>.</p></div>
+  <div class="term"><h4><code>.env</code></h4><p>Un fichier de variables secrètes (la clé API). Jamais envoyé sur GitHub ni dans une image Docker.</p></div>
+  <div class="term"><h4>Markdown (<code>.md</code>)</h4><p>Du texte simple avec une mise en forme légère (<code>#</code> titres, <code>-</code> listes). Toute la documentation est en Markdown.</p></div>
+</div>
+
+<h3>Docker</h3>
+<div class="glossary">
+  <div class="term"><h4><svg class="ico"><use href="#i-box"/></svg>Docker</h4><p>Un outil qui fait tourner des programmes dans des <strong>conteneurs</strong> : des boîtes isolées qui contiennent le programme et tout ce dont il a besoin. Le programme marche pareil sur tous les ordinateurs.</p></div>
+  <div class="term"><h4>Image</h4><p>Le « modèle » figé d'un conteneur (système + Python + bibliothèques + code). Exemples : <code>qdrant/qdrant:v1.15.5</code>, <code>elearning-assistant:dev</code>.</p></div>
+  <div class="term"><h4>Conteneur</h4><p>Une image en train de tourner. On peut en lancer plusieurs à partir de la même image (ici : <code>worker</code>, <code>ui</code>, <code>student</code>).</p></div>
+  <div class="term"><h4>Dockerfile</h4><p>La recette pour construire une image, ligne par ligne (<code>FROM</code>, <code>COPY</code>, <code>RUN</code>, <code>CMD</code>).</p></div>
+  <div class="term"><h4>Docker Compose</h4><p>Lance <strong>plusieurs conteneurs ensemble</strong> à partir d'un seul fichier, <code>docker-compose.yml</code>. Une commande : <code>docker compose up -d</code>.</p></div>
+  <div class="term"><h4>Volume</h4><p>Un espace de stockage géré par Docker qui garde les données même si le conteneur est supprimé (<code>qdrant_storage</code>, <code>app_data</code>).</p></div>
+  <div class="term"><h4>Port</h4><p>Une « porte » d'accès réseau. <code>8502:8502</code> rend le conteneur accessible à <code>http://localhost:8502</code>.</p></div>
+  <div class="term"><h4>Profil Compose</h4><p>Un groupe de services lancé seulement sur demande. Ici <code>--profile app</code> ajoute le worker et les deux interfaces à Qdrant.</p></div>
+</div>
+
+<h3>Données et recherche</h3>
+<div class="glossary">
+  <div class="term"><h4><svg class="ico"><use href="#i-db"/></svg>SQLite</h4><p>Une base de données SQL contenue dans <strong>un seul fichier</strong> (<code>data/app.db</code>), sans serveur. Elle garde cahiers, tâches, cache et métriques.</p><p class="ex">Mode <strong>WAL</strong> : permet d'écrire et de lire en même temps (le worker écrit, l'interface lit).</p></div>
+  <div class="term"><h4><svg class="ico"><use href="#i-db"/></svg>Qdrant</h4><p>Une <strong>base de données vectorielle</strong>. Elle range les passages des documents sous forme de vecteurs et retrouve très vite ceux qui ont un sens proche d'une question. Elle sait aussi chercher par mots-clés (BM25) et filtrer par cahier.</p><p class="ex">Tableau de bord : <code>http://localhost:6333/dashboard</code>. Utilisée à partir de la phase 1.</p></div>
+  <div class="term"><h4>Vecteur / embedding</h4><p>Une liste de nombres qui représente le <strong>sens</strong> d'un texte. Deux textes de sens proche ont des vecteurs proches, même en deux langues différentes : « photosynthèse » et « photosynthesis ».</p></div>
+  <div class="term"><h4>Reranker</h4><p>Un modèle qui relit une question et une liste de passages et les <strong>reclasse</strong> du plus pertinent au moins pertinent. Plus précis que la recherche seule.</p></div>
+  <div class="term"><h4>Redis</h4><p>Une base en mémoire, très rapide, pour partager une file de tâches entre plusieurs machines. Pas utilisée maintenant ; prévue en phase 8 pour la production.</p></div>
+  <div class="term"><h4>Cache</h4><p>Une mémoire des résultats déjà calculés. Si on refait le même appel, on reprend le résultat au lieu de rappeler le modèle.</p></div>
+</div>
+
+<h3>Intelligence artificielle</h3>
+<div class="glossary">
+  <div class="term"><h4><svg class="ico"><use href="#i-cpu"/></svg>LLM (grand modèle de langage)</h4><p>Un modèle d'IA entraîné sur énormément de texte, capable de comprendre une consigne et de rédiger une réponse. Il peut se tromper ou « inventer » (halluciner) : c'est pour ça qu'on l'oblige à citer ses sources et qu'on vérifie.</p></div>
+  <div class="term"><h4><svg class="ico"><use href="#i-cloud"/></svg>NVIDIA Build</h4><p>Le site (<code>build.nvidia.com</code>) qui donne accès gratuitement à de nombreux modèles d'IA par Internet, avec une <strong>clé API</strong>. Gratuit mais limité (environ 40 requêtes par minute et par modèle) et prévu pour le développement.</p></div>
+  <div class="term"><h4>API et clé API</h4><p>Une API est une façon pour un programme d'en appeler un autre par Internet. La clé API (<code>nvapi-…</code>) prouve qui appelle ; elle est secrète.</p></div>
+  <div class="term"><h4>Modèles utilisés (rôles)</h4><p><code>chat</code> : Nemotron Super 49B (réponses de qualité) ; <code>fast</code> : Llama 3.1 8B (tâches nombreuses) ; <code>embed</code> : nv-embedqa (vecteurs, multilingue) ; <code>rerank</code> : nv-rerankqa. Les identifiants sont dans <code>config.yaml</code>.</p></div>
+  <div class="term"><h4>RAG</h4><p><em>Retrieval-Augmented Generation</em> : avant de répondre, on <strong>cherche</strong> les passages utiles dans les documents, puis on demande au LLM de répondre <strong>uniquement</strong> à partir de ces passages, en les citant.</p></div>
+  <div class="term"><h4>OCR</h4><p>Reconnaissance de caractères : lire le texte contenu dans une image ou une page scannée (phases 1 et 3).</p></div>
+  <div class="term"><h4>VLM</h4><p>Modèle vision-langage : un LLM qui comprend aussi les images (schémas, écriture manuscrite, formules).</p></div>
+  <div class="term"><h4>ASR / TTS</h4><p>ASR : transformer la parole en texte (transcrire le cours audio, phase 4). TTS : transformer du texte en voix (podcast, phase 6).</p></div>
+  <div class="term"><h4>Token</h4><p>Un petit morceau de texte (environ ¾ de mot) : c'est l'unité que les modèles lisent et produisent.</p></div>
+  <div class="term"><h4>Erreur 429</h4><p>Réponse « trop de requêtes » de l'API : on a dépassé la limite. Le limiteur l'évite et le réessai la gère.</p></div>
+</div>
+
+<h3>Bibliothèques Python</h3>
+<div class="glossary">
+  <div class="term"><h4>Streamlit</h4><p>Crée une application web en Python, sans HTML ni JavaScript. Utilisé pour les deux interfaces.</p></div>
+  <div class="term"><h4>openai (SDK)</h4><p>La bibliothèque officielle pour appeler des modèles au format OpenAI. NVIDIA Build accepte ce format : on l'utilise avec l'adresse de NVIDIA.</p></div>
+  <div class="term"><h4>Pydantic</h4><p>Décrit la forme des données (classes avec types) et vérifie qu'une donnée la respecte. Sert pour la config, les modèles de données et le JSON des LLM.</p></div>
+  <div class="term"><h4>asyncio</h4><p>La programmation <strong>asynchrone</strong> de Python : lancer beaucoup d'appels réseau en même temps sans attendre chacun.</p></div>
+  <div class="term"><h4>aiolimiter</h4><p>Limite le nombre d'appels par minute en mode asynchrone (dans <code>limiter.py</code>).</p></div>
+  <div class="term"><h4>tenacity</h4><p>Gère les réessais automatiques avec attente croissante (dans <code>base.py</code>).</p></div>
+  <div class="term"><h4>httpx</h4><p>Client HTTP asynchrone, utilisé pour le reranker (qui n'a pas le format OpenAI).</p></div>
+  <div class="term"><h4>qdrant-client</h4><p>La bibliothèque Python pour parler à Qdrant.</p></div>
+  <div class="term"><h4>pytest</h4><p>L'outil de tests automatiques. <code>pytest</code> lance les 31 tests ; <code>pytest -m live</code> lance ceux qui appellent la vraie API.</p></div>
+  <div class="term"><h4>pandas</h4><p>Manipulation de tableaux de données ; utilisé pour afficher les tableaux dans Streamlit.</p></div>
+</div>
+</section>
+
+<!-- 9 -->
+<section id="lancer">
+<h2><svg class="ico"><use href="#i-play"/></svg>9. Lancer le projet</h2>
+<p>Toujours depuis la racine du dépôt, avec le venv activé.</p>
+<div class="grid two">
+  <div class="card"><h4>Première installation</h4>
+<pre><code>python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r assistant\requirements.lock.txt
+copy assistant\.env.example .env
+docker compose up -d
+pytest
+python -m assistant.scripts.smoke_test</code></pre></div>
+  <div class="card"><h4>Ouvrir les interfaces</h4>
+<pre><code># interface étudiante → http://localhost:8502
+streamlit run assistant\app\student_app.py --theme.base=dark --server.port=8502
+
+# interface développeur → http://localhost:8501
+streamlit run assistant\app\streamlit_app.py
+
+# worker (autre terminal, pour les tâches)
+python -m assistant.worker</code></pre></div>
+</div>
+<div class="callout info"><b>Tout dans Docker</b><code>docker compose --profile app up -d --build</code> lance Qdrant, le worker et les deux interfaces (8501 et 8502). <code>docker compose --profile app down</code> les arrête ; les données restent dans les volumes.</div>
+</section>
+
+<!-- 10 -->
+<section id="questions" class="qa">
+<h2><svg class="ico"><use href="#i-q"/></svg>10. Questions probables du prof</h2>
+<details><summary>Pourquoi le RAG et pas l'entraînement d'un modèle sur les cours ?</summary><div><p>Entraîner un modèle coûte cher, prend du temps, et il peut quand même inventer. Avec le RAG, le modèle répond à partir des passages retrouvés et les cite : c'est vérifiable, à jour dès qu'on ajoute un document, et ça marche avec des modèles gratuits.</p></div></details>
+<details><summary>Comment évitez-vous que l'IA invente ?</summary><div><p>Consigne de répondre seulement avec les sources et de citer [n] ; vérification que chaque citation existe ; réponse « pas dans tes documents » quand rien ne correspond (phase 2) ; pour le résumé, citations mot pour mot vérifiées par du code et un second modèle, et formules insérées par le code (phase 5).</p></div></details>
+<details><summary>Pourquoi Qdrant ?</summary><div><p>Il combine recherche par le sens (vecteurs) et par mots-clés (BM25), filtre par cahier, tourne en local dans Docker et peut passer en serveur pour la production.</p></div></details>
+<details><summary>Pourquoi SQLite et pas Redis ?</summary><div><p>Ils ne font pas le même travail. On a besoin de garder durablement des résultats coûteux (OCR, transcriptions) et des données reliées entre elles : c'est le rôle d'une base SQL. Avec un seul worker sur une machine, SQLite suffit. Redis sert à partager une file entre plusieurs machines : prévu en phase 8. Le code passe par des interfaces (<code>JobQueue</code>, <code>CallCache</code>) pour pouvoir changer facilement.</p></div></details>
+<details><summary>Pourquoi un worker séparé ?</summary><div><p>Analyser un PDF de 200 pages ou une heure d'audio prend des minutes. Si l'interface le faisait elle-même, elle serait bloquée. Le worker travaille en arrière-plan, l'interface affiche la progression, et un crash ne perd pas le travail déjà fait.</p></div></details>
+<details><summary>Que se passe-t-il si l'API renvoie « trop de requêtes » (429) ?</summary><div><p>D'abord, le limiteur évite de dépasser la limite. Si ça arrive quand même, <code>with_retries</code> réessaie avec une attente croissante (jusqu'à 5 fois). Si le modèle reste indisponible, <code>with_fallbacks</code> passe au modèle de secours.</p></div></details>
+<details><summary>Comment vérifiez-vous que la reprise après crash marche ?</summary><div><p>Par un test automatique (<code>test_run_tasks_resumes_only_unfinished</code>) et par un vrai essai : worker arrêté de force après 3 tâches sur 300, puis relancé ; le job s'est terminé à 300/300 et les 3 tâches déjà faites n'ont pas été refaites.</p></div></details>
+<details><summary>Comment testez-vous sans payer d'appels ?</summary><div><p>Les tests utilisent un <strong>faux client</strong> qui imite l'API (réponses, erreurs 429, 404, 400). Les tests qui appellent la vraie API sont marqués <code>live</code> et ne tournent que sur demande.</p></div></details>
+<details><summary>Pourquoi deux interfaces ?</summary><div><p>L'interface développeur montre tout ce qui sert à déboguer (scores, prompts, métriques) ; l'interface étudiante montre seulement le produit, propre, pour valider l'expérience avec le professeur. Les deux utilisent le même cœur (<code>assistant/core</code>).</p></div></details>
+<details><summary>Pourquoi pas YOLO pour les images ?</summary><div><p>YOLO détecte des objets (« une personne, une chaise ») mais ne lit pas le texte et ne comprend pas un schéma. Pour des documents d'étude, il faut de l'OCR et un modèle vision-langage.</p></div></details>
+<details><summary>Pourquoi le résumé n'utilise-t-il pas le RAG ?</summary><div><p>Le RAG ne garde que les passages les plus pertinents pour une question : il en oublie volontairement. Un résumé doit être complet, donc on parcourt tout le cours section par section (map-reduce), puis on vérifie qu'aucun élément obligatoire ne manque.</p></div></details>
+<details><summary>Pourquoi des volumes Docker et pas un dossier du PC ?</summary><div><p>Sous Windows, monter un dossier du disque dans un conteneur peut corrompre les fichiers de Qdrant et le journal WAL de SQLite. Les volumes nommés évitent ce problème.</p></div></details>
+</section>
+
+<!-- 11 -->
+<section id="suite">
+<h2><svg class="ico"><use href="#i-map"/></svg>11. La suite</h2>
+<div class="steps">
+  <div class="step"><span class="n">1</span><br><strong>Clé API</strong><small>créer <code>.env</code> avec <code>NVIDIA_API_KEY</code></small></div>
+  <div class="step"><span class="n">2</span><br><strong>Smoke test</strong><small><code>python -m assistant.scripts.smoke_test</code> : corriger les identifiants de modèles si besoin</small></div>
+  <div class="step"><span class="n">3</span><br><strong>Demo job réel</strong><small>100 tâches depuis l'onglet Performance, puis une 2e fois (tout doit venir du cache)</small></div>
+  <div class="step"><span class="n">4</span><br><strong>Phase 1</strong><small>en commençant par <code>P1-T01</code> dans <code>docs/phases/phase-1-pdf-and-chat.md</code></small></div>
+</div>
+<div class="callout warn"><b>À savoir</b>Les identifiants de modèles et certaines adresses de l'API NVIDIA (reranker, OCR, voix) viennent du plan et n'ont pas encore été testés avec une vraie clé : le smoke test le confirmera.</div>
+</section>
+
+<footer>Guide du projet E-learning · assistant d'étude · état : fin de la phase 0</footer>
+</main>
+</div>
+
+<script>
+function toggleTheme(){
+  var root = document.documentElement;
+  var dark = root.getAttribute('data-theme') === 'dark' ||
+    (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  root.setAttribute('data-theme', dark ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>
